@@ -1,20 +1,24 @@
-require('./db/connectDB')
-require('dotenv').config()
-const express = require('express')
-const accessAPI = require('./config/accessAPI')
+require("./db/connectDB");
+require("dotenv").config();
 
-const userRouter = require('./router/user.router')
-const messageRouter = require('./router/message.router')
+const http = require("http");
+const createHttpServer = require("./httpServer");
+const createWsServer = require("./wsServer");
 
-const app =  express()
-const port = process.env.PORT || 3000
+// Créer le serveur Express
+const app = createHttpServer();
 
-app.use(express.json())
-app.use(accessAPI)
-app.use(userRouter)
-app.use(messageRouter)
+// Attacher Express au serveur HTTP
+const httpServer = http.createServer(app);
 
-app.listen(port, () => {
-  console.log("Server is up on port", port);
-})
+// Attacher Socket.IO au même serveur
+const io = createWsServer(httpServer);
+app.set("io", io);
 
+// Lancer le serveur
+const PORT = 3000;
+const HOST = process.env.HOST || "127.0.0.1";
+
+httpServer.listen(process.env.PORT || PORT, HOST, () => {
+    console.log(`Serveur REST + WebSocket sur ${HOST}:${PORT}`);
+});
