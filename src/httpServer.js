@@ -1,4 +1,3 @@
-const cookieParser = require("cookie-parser");
 const express = require("express");
 const accessAPI = require("./config/accessAPI");
 
@@ -12,7 +11,6 @@ function createHttpServer() {
     app.use(accessAPI);
     app.use(userRouter);
     app.use(messageRouter);
-    app.use(cookieParser());
 
     return app;
 }
