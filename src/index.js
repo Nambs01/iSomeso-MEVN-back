@@ -1,5 +1,5 @@
-require("./db/connectDB");
 require("dotenv").config();
+require("./db/connectDB");
 
 const http = require("http");
 const createHttpServer = require("./httpServer");
