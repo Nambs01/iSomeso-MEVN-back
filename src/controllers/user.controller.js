@@ -62,9 +62,9 @@ const deleteUser = async (req, res) => {
 const updateUserAvatar = async (req, res) => {
     try {
         // Mettre a jour l'avatar de l'utilisateur
-        req.user.avatar = req.user.avatarDirName + "\\" + req.user.avatarFileName;
+        req.user.avatar = req.user.avatarDirName + req.user.avatarFileName;
         await req.user.save();
-        res.send({ user: req.user });
+        res.send({ url: req.user.avatar });
     } catch (error) {
         res.status(400).send({ error: error.message });
     }
@@ -72,7 +72,7 @@ const updateUserAvatar = async (req, res) => {
 
 const deleteUserAvatar = async (req, res) => {
     try {
-        await promises.rmdir(req.user.avatar, { recursive: true });
+        await promises.rm(req.user.avatar, { recursive: true });
         req.user.avatar = undefined;
         await req.user.save();
         res.send(req.user);

@@ -11,6 +11,7 @@ function createHttpServer() {
     app.use(accessAPI);
     app.use(userRouter);
     app.use(messageRouter);
+    app.use("/uploads", express.static("uploads"));
 
     return app;
 }

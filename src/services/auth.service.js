@@ -53,7 +53,6 @@ class AuthService {
     }
 
     static async handleRefreshToken(req, res) {
-        console.log("***********REFRESH********");
         try {
             const { refreshToken } = req.body;
             if (!refreshToken) throw { status: 401, message: "No refresh token available!" };
@@ -78,7 +77,8 @@ class AuthService {
                     foundUser.refreshToken = [...newRefreshTokenArray];
                     await foundUser.save();
                 }
-                if (foundUser.email != decoded.email) throw { status: 403, message: "Forbidden!" };
+                if (decoded && foundUser.email != decoded.email)
+                    throw { status: 403, message: "Forbidden!" };
 
                 const { _id, email } = foundUser;
                 const accessToken = this.generateAccessToken({ _id, email });
@@ -132,11 +132,11 @@ class AuthService {
     }
 
     static generateAccessToken(payload) {
-        return jwt.sign(payload, process.env.TOKEN_SECRET_KEY, { expiresIn: "10s" });
+        return jwt.sign(payload, process.env.TOKEN_SECRET_KEY, { expiresIn: "15m" });
     }
 
     static generateRefreshToken(email) {
-        return jwt.sign({ email }, process.env.REFRESH_TOKEN_SECRET_KEY, { expiresIn: "4m" });
+        return jwt.sign({ email }, process.env.REFRESH_TOKEN_SECRET_KEY, { expiresIn: "7days" });
     }
 }
 
