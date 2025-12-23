@@ -97,8 +97,12 @@ class AuthService {
         }
     }
 
-    static async handleRegister(payload) {
+    static async handleRegister(req, res) {
         try {
+            const payload = req.body;
+            if (!payload.email || !payload.password)
+                throw { status: 400, message: "Email and Password are required!" };
+
             const existingUser = await UserService.findOne({ email: payload.email });
             if (existingUser) throw { status: 400, message: "User already exists!" };
 
