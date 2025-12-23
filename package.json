@@ -15,7 +15,7 @@
         "sharp": "^0.33.2",
         "socket.io": "^4.7.5"
     },
-    "name": "chat-app-back",
+    "name": "api-esomeso",
     "version": "1.0.0",
     "main": "index.js",
     "scripts": {
